@@ -23,7 +23,7 @@ const StudentRegistrationForm = () => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
-    phone: "",
+    phone: "+91 ",
     abroad_interest: "",
     country: "",
   });
@@ -56,11 +56,11 @@ const StudentRegistrationForm = () => {
         break;
 
       case "phone":
-        const phoneRegex = /^[+]?[\d\s\-\(\)]{10,}$/;
+        const phoneRegex = /^(\+91\s?)[\d\s\-\(\)]{10,}$/;
         if (!value.trim()) {
           newErrors.phone = "Phone number is required";
         } else if (!phoneRegex.test(value)) {
-          newErrors.phone = "Please enter a valid phone number";
+          newErrors.phone = "Please enter a valid phone number with +91";
         } else {
           delete newErrors.phone;
         }
@@ -127,7 +127,7 @@ const StudentRegistrationForm = () => {
     setFormData({
       name: "",
       email: "",
-      phone: "",
+      phone: "+91 ",
       abroad_interest: "",
       country: "",
     });
@@ -202,9 +202,16 @@ const StudentRegistrationForm = () => {
               </Label>
               <Input
                 type="tel"
-                placeholder="Phone Number"
+                placeholder="+91 Phone Number"
                 value={formData.phone}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
+                onChange={(e) => {
+                  let value = e.target.value;
+                  // Ensure +91 prefix is always present
+                  if (!value.startsWith("+91")) {
+                    value = "+91 " + value.replace(/^\+?\d*\s*/, "");
+                  }
+                  handleInputChange("phone", value);
+                }}
                 className="bg-input-gradient shadow-input-inset border-none text-sm sm:text-base p-2 sm:p-3 rounded-lg mt-1"
               />
               {errors.phone && (
@@ -250,12 +257,12 @@ const StudentRegistrationForm = () => {
                     <SelectValue placeholder="Select a country" />
                   </SelectTrigger>
                   <SelectContent className="bg-popover border-border">
-                    <SelectItem value="Germany">Germany</SelectItem>
-                    <SelectItem value="UK">UK</SelectItem>
-                    <SelectItem value="Ireland">Ireland</SelectItem>
-                    <SelectItem value="Spain">Spain</SelectItem>
-                    <SelectItem value="Italy">Italy</SelectItem>
-                    <SelectItem value="Netherlands">Netherlands</SelectItem>
+                    <SelectItem value="Germany">🇩🇪 Germany</SelectItem>
+                    <SelectItem value="UK">🇬🇧 UK</SelectItem>
+                    <SelectItem value="Ireland">🇮🇪 Ireland</SelectItem>
+                    <SelectItem value="Spain">🇪🇸 Spain</SelectItem>
+                    <SelectItem value="Italy">🇮🇹 Italy</SelectItem>
+                    <SelectItem value="Netherlands">🇳🇱 Netherlands</SelectItem>
                   </SelectContent>
                 </Select>
                 {errors.country && (
