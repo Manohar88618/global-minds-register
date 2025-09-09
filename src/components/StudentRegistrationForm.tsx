@@ -12,7 +12,7 @@ interface FormData {
   email: string;
   phone: string;
   abroad_interest: string;
-  event_name: string;
+  country?: string;
 }
 
 interface FormErrors {
@@ -25,7 +25,7 @@ const StudentRegistrationForm = () => {
     email: "",
     phone: "",
     abroad_interest: "",
-    event_name: "",
+    country: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -74,11 +74,11 @@ const StudentRegistrationForm = () => {
         }
         break;
 
-      case "event_name":
-        if (!value.trim()) {
-          newErrors.event_name = "Event name is required";
+      case "country":
+        if (formData.abroad_interest === "Yes" && !value) {
+          newErrors.country = "Please select a country";
         } else {
-          delete newErrors.event_name;
+          delete newErrors.country;
         }
         break;
     }
@@ -87,7 +87,14 @@ const StudentRegistrationForm = () => {
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => {
+      const updated = { ...prev, [field]: value };
+      // Reset country selection if abroad interest changes to "No"
+      if (field === "abroad_interest" && value === "No") {
+        updated.country = "";
+      }
+      return updated;
+    });
     validateField(field, value);
   };
 
@@ -122,24 +129,33 @@ const StudentRegistrationForm = () => {
       email: "",
       phone: "",
       abroad_interest: "",
-      event_name: "",
+      country: "",
     });
     setErrors({});
   };
 
   return (
-    <div className="min-h-screen bg-form-gradient flex items-center justify-center p-5">
-      <Card className="w-full max-w-md bg-card shadow-form rounded-xl overflow-hidden">
-        <CardContent className="p-6 text-center">
+    <div 
+      className="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8"
+      style={{
+        backgroundImage: `url('/lovable-uploads/1eb58819-0735-4cf5-a080-869726a5ac58.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <div className="absolute inset-0 bg-black/30"></div>
+      <Card className="relative z-10 w-full max-w-sm sm:max-w-md bg-card/95 backdrop-blur-sm shadow-form rounded-xl overflow-hidden">
+        <CardContent className="p-4 sm:p-6 text-center">
           <div className="mb-4">
             <img 
               src={globalMindsLogoUrl} 
               alt="Global Minds India Logo" 
-              className="mx-auto mb-4 max-w-[600px] w-full h-auto object-contain"
+              className="mx-auto mb-4 max-w-[300px] sm:max-w-[400px] w-full h-auto object-contain"
             />
           </div>
           
-          <h3 className="text-2xl font-bold text-card-foreground mb-6">
+          <h3 className="text-xl sm:text-2xl font-bold text-card-foreground mb-4 sm:mb-6">
             Student Registration Form
           </h3>
 
@@ -153,7 +169,7 @@ const StudentRegistrationForm = () => {
                 placeholder="Full Name"
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
-                className="bg-input-gradient shadow-input-inset border-none text-base p-3 rounded-lg mt-1"
+                className="bg-input-gradient shadow-input-inset border-none text-sm sm:text-base p-2 sm:p-3 rounded-lg mt-1"
               />
               {errors.name && (
                 <span className="text-destructive text-sm block mt-1 text-center">
@@ -171,7 +187,7 @@ const StudentRegistrationForm = () => {
                 placeholder="Email Address"
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
-                className="bg-input-gradient shadow-input-inset border-none text-base p-3 rounded-lg mt-1"
+                className="bg-input-gradient shadow-input-inset border-none text-sm sm:text-base p-2 sm:p-3 rounded-lg mt-1"
               />
               {errors.email && (
                 <span className="text-destructive text-sm block mt-1 text-center">
@@ -189,7 +205,7 @@ const StudentRegistrationForm = () => {
                 placeholder="Phone Number"
                 value={formData.phone}
                 onChange={(e) => handleInputChange("phone", e.target.value)}
-                className="bg-input-gradient shadow-input-inset border-none text-base p-3 rounded-lg mt-1"
+                className="bg-input-gradient shadow-input-inset border-none text-sm sm:text-base p-2 sm:p-3 rounded-lg mt-1"
               />
               {errors.phone && (
                 <span className="text-destructive text-sm block mt-1 text-center">
@@ -206,10 +222,10 @@ const StudentRegistrationForm = () => {
                 value={formData.abroad_interest}
                 onValueChange={(value) => handleInputChange("abroad_interest", value)}
               >
-                <SelectTrigger className="bg-input-gradient shadow-input-inset border-none text-base p-3 rounded-lg mt-1">
+                <SelectTrigger className="bg-input-gradient shadow-input-inset border-none text-sm sm:text-base p-2 sm:p-3 rounded-lg mt-1">
                   <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover border-border">
                   <SelectItem value="Yes">Yes</SelectItem>
                   <SelectItem value="No">No</SelectItem>
                 </SelectContent>
@@ -221,35 +237,42 @@ const StudentRegistrationForm = () => {
               )}
             </div>
 
-            <div>
-              <Input
-                type="text"
-                placeholder="Event Name"
-                value={formData.event_name}
-                onChange={(e) => handleInputChange("event_name", e.target.value)}
-                className="bg-input-gradient shadow-input-inset border-none text-base p-3 rounded-lg"
-              />
-              {errors.event_name && (
-                <span className="text-destructive text-sm block mt-1 text-center">
-                  {errors.event_name}
-                </span>
-              )}
-            </div>
+            {formData.abroad_interest === "Yes" && (
+              <div>
+                <Label className="text-card-foreground text-sm font-medium">
+                  Select Country
+                </Label>
+                <Select
+                  value={formData.country}
+                  onValueChange={(value) => handleInputChange("country", value)}
+                >
+                  <SelectTrigger className="bg-input-gradient shadow-input-inset border-none text-sm sm:text-base p-2 sm:p-3 rounded-lg mt-1">
+                    <SelectValue placeholder="Select a country" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-popover border-border">
+                    <SelectItem value="Germany">Germany</SelectItem>
+                    <SelectItem value="UK">UK</SelectItem>
+                    <SelectItem value="Ireland">Ireland</SelectItem>
+                    <SelectItem value="Spain">Spain</SelectItem>
+                    <SelectItem value="Italy">Italy</SelectItem>
+                    <SelectItem value="Netherlands">Netherlands</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.country && (
+                  <span className="text-destructive text-sm block mt-1 text-center">
+                    {errors.country}
+                  </span>
+                )}
+              </div>
+            )}
 
             <Button 
               type="submit" 
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg py-6 rounded-lg transition-colors duration-300 mt-6"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-base sm:text-lg py-4 sm:py-6 rounded-lg transition-colors duration-300 mt-6"
             >
-              Submit Registration
+              Submit
             </Button>
           </form>
-
-          <a 
-            href="#" 
-            className="inline-block mt-4 bg-success-green hover:bg-success-green/90 text-white py-2 px-5 rounded-lg no-underline text-base transition-colors duration-300"
-          >
-            Contact Support
-          </a>
         </CardContent>
       </Card>
     </div>
