@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import globalMindsLogo from "@/assets/global-minds-logo.png";
+const globalMindsLogoUrl = "/lovable-uploads/8fd5ff83-2d56-44d2-a9bd-fcb2a2591e69.png";
 
 interface FormData {
   name: string;
@@ -133,9 +133,9 @@ const StudentRegistrationForm = () => {
         <CardContent className="p-6 text-center">
           <div className="mb-4">
             <img 
-              src={globalMindsLogo} 
+              src={globalMindsLogoUrl} 
               alt="Global Minds India Logo" 
-              className="mx-auto mb-4 max-w-[300px] w-[250px] h-[200px] object-contain"
+              className="mx-auto mb-4 max-w-[600px] w-full h-auto object-contain"
             />
           </div>
           
@@ -145,12 +145,15 @@ const StudentRegistrationForm = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4 text-left">
             <div>
+              <Label className="text-card-foreground text-sm font-medium">
+                Full Name
+              </Label>
               <Input
                 type="text"
                 placeholder="Full Name"
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
-                className="bg-input-gradient shadow-input-inset border-none text-base p-3 rounded-lg"
+                className="bg-input-gradient shadow-input-inset border-none text-base p-3 rounded-lg mt-1"
               />
               {errors.name && (
                 <span className="text-destructive text-sm block mt-1 text-center">
@@ -160,12 +163,15 @@ const StudentRegistrationForm = () => {
             </div>
 
             <div>
+              <Label className="text-card-foreground text-sm font-medium">
+                Email Address
+              </Label>
               <Input
                 type="email"
                 placeholder="Email Address"
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
-                className="bg-input-gradient shadow-input-inset border-none text-base p-3 rounded-lg"
+                className="bg-input-gradient shadow-input-inset border-none text-base p-3 rounded-lg mt-1"
               />
               {errors.email && (
                 <span className="text-destructive text-sm block mt-1 text-center">
