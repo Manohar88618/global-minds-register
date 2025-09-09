@@ -47,6 +47,9 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "sky-blue": "hsl(var(--sky-blue))",
+        "deep-sky-blue": "hsl(var(--deep-sky-blue))",
+        "success-green": "hsl(var(--success-green))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -57,6 +60,14 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      backgroundImage: {
+        "form-gradient": "var(--form-gradient)",
+        "input-gradient": "var(--input-gradient)",
+      },
+      boxShadow: {
+        "form": "var(--form-shadow)",
+        "input-inset": "var(--input-shadow)",
       },
       borderRadius: {
         lg: "var(--radius)",
